@@ -67,13 +67,20 @@ public class ExamSystem {
         int score = 0;
 
         for (Question q : questions) {
-            if (timer.isTimeUp()) break;
+            if (timer.isTimeUp()) {
+                System.out.println("\n⏰ Time Up!");
+                break;
+            }
             q.display();
             int ans = sc.nextInt();
-            if (q.isCorrect(ans)) score++;
+            if (q.isCorrect(ans)) {
+                score++;
+            }
         }
 
-        timer.stop();
+        // SAFE way to stop timer
+        timer.interrupt();
+
         System.out.println("\nExam Auto-Submitted!");
         System.out.println("Your Score: " + score + "/" + questions.size());
     }
