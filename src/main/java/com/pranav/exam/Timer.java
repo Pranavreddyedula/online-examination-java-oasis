@@ -3,7 +3,7 @@ package com.pranav.exam;
 public class Timer extends Thread {
 
     private int seconds;
-    private boolean timeUp = false;
+    private volatile boolean timeUp = false;
 
     public Timer(int seconds) {
         this.seconds = seconds;
@@ -11,12 +11,16 @@ public class Timer extends Thread {
 
     public void run() {
         try {
-            while (seconds > 0) {
+            while (seconds > 0 && !isInterrupted()) {
                 Thread.sleep(1000);
                 seconds--;
             }
-            timeUp = true;
-        } catch (InterruptedException ignored) {}
+            if (seconds == 0) {
+                timeUp = true;
+            }
+        } catch (InterruptedException e) {
+            // Thread stopped safely
+        }
     }
 
     public boolean isTimeUp() {
